@@ -27,11 +27,15 @@ procedure askme(text:string); //процедура считывания
 procedure colorfy(x, y: integer); //процедура считывания цветных пикселей
   begin  
     var c := GetPixel(x, y); //возвращает цвет точки (x, y)
-    if ((GetRed(c) < 255) and (GetGreen(c) < 255) and (GetBlue(c) < 255)) then  //определяется RBG состав
+    if ((GetRed(c) > 170) and (GetGreen(c) > 170) and (GetBlue(c) > 170)) then  //определяется RBG состав
       begin
+        SetPixel(x,y,clWhite);
+      end
+      else begin
         coordinates[f].x := x;
         coordinates[f].y := y;
         f:=f+1;
+        SetPixel(x,y,clBlack);
       end;
   end;
 
