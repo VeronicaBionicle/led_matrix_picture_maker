@@ -1,0 +1,79 @@
+uses
+  GraphABC;
+   
+var
+  n:string;
+  i,j,W,H:integer;
+  b:Picture;
+  label metka1, metka2, metka3, start;
+  
+procedure askme(text:string); //процедура считывания
+  begin
+    write(text);
+    readln (n);
+  end;
+
+
+procedure colorfy(x, y: integer); //процедура считывания цветных пикселей
+  begin  
+    var c := GetPixel(x, y); //возвращает цвет точки (x, y)
+    if ((GetRed(c) > 170) and (GetGreen(c) > 170) and (GetBlue(c) > 170)) then  //определяется RBG состав
+      begin
+      SetPixel(x,y,clWhite);  
+      end
+      else SetPixel(x,y,clBlack);
+  end;
+
+procedure drawing(n:string);// Процедура создания рисунка
+  begin
+    window.Clear;
+    b:=Picture.Create(n);
+    b.Load(n);
+    b.Draw(0,0,W,H);
+  end;
+
+procedure savepict(n:string);// Процедура сохранения рисунка
+  begin
+    b := Picture.Create(new System.Drawing.Rectangle(0,22,W,H));
+    b.Save(n);
+  end;
+
+
+begin // Основная программа
+ start:
+  
+  SetWindowSize(1920,1080);
+  MaximizeWindow;
+  write('Введите размеры рисунка');
+    readln (W, H);
+
+  metka1:
+    askme('Введите название файла с рисунком');
+    if (pos('.png',n)= 0) and (pos('.jpg',n)= 0) and (pos('.gif',n)= 0) then goto metka1; 
+      drawing(n); //вызываем процедуру создания рисунка
+     readln();
+     for i:=0 to W do begin
+        for j:=0 to H do
+          colorfy(i, j);
+      end;
+      
+    askme('Хотите сохранить рисунок? y/n' );
+    if n = 'y' then
+      begin
+        metka3:
+          askme('Введите название файла для сохранения результата');
+          if (pos('.png',n)= 0) and (pos('.jpg',n)= 0) and (pos('.gif',n)= 0) then goto metka3; 
+          savepict(n); //вызываем процедуру создания рисунка
+      end;
+      
+writeln('Готово!');
+
+
+askme('Продолжить работу или выйти? y/n');
+if n = 'y' then
+  begin
+    window.Clear;
+    goto start;
+  end;
+  CloseWindow;
+end.
